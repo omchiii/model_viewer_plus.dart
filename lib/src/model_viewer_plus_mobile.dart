@@ -220,7 +220,6 @@ class ModelViewerState extends State<ModelViewer> {
   }
 
   Future<void> _initProxy() async {
-    final url = Uri.parse(widget.src);
     _proxy = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
 
     setState(() {
@@ -230,6 +229,7 @@ class ModelViewerState extends State<ModelViewer> {
     });
 
     _proxy!.listen((request) async {
+      final url = Uri.parse(widget.src);
       final response = request.response;
 
       switch (request.uri.path) {
