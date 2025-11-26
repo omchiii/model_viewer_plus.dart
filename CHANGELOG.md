@@ -1,3 +1,11 @@
+## 1.10.0
+
+### Changed
+- Update dependencies
+- Remove Flutter deprecated methods
+- Update Dart to ^3.10.0
+- Upgrade `<model-viewer>` to 4.1.0
+
 ## 1.9.3
 
 ### Changed

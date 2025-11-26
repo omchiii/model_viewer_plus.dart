@@ -34,7 +34,7 @@ If [Google Play Services for AR (ARCore, `com.google.ar.core`)](https://play.goo
 
 ```yaml
 dependencies:
-  model_viewer_plus: ^1.8.0
+  model_viewer_plus: ^1.10.0
 ```
 
 ### `AndroidManifest.xml` (Android 9+ only)
@@ -71,11 +71,11 @@ This does not affect Android 8 and earlier. See [#7] for more information.
 
 ### `app/build.gradle` (Android only)
 
-Change minSdkVersion to 21.
+Change minSdkVersion to 24.
 
     defaultConfig {
         ...
-        minSdkVersion 21
+        minSdkVersion 24
         ...
     }
 

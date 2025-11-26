@@ -3,7 +3,7 @@ description: "A project that showcases usage of model_viewer_plus"
 publish_to: 'none'
 version: 1.0.0+1
 environment:
-  sdk: '>=3.4.0 <4.0.0'
+  sdk: ^3.10.0
 
 dependencies:
   flutter:
@@ -13,7 +13,7 @@ dependencies:
       ../
 
 dev_dependencies:
-  carapacik_lints: ^1.8.1
+  carapacik_lints: ^3.10.1
 
 flutter:
   uses-material-design: true

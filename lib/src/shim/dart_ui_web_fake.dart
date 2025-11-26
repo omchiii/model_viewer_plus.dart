@@ -11,6 +11,5 @@ class PlatformViewRegistry {
     String viewType,
     Function viewFactory, {
     bool isVisible = true,
-  }) =>
-      false;
+  }) => false;
 }

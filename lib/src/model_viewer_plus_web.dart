@@ -5,10 +5,12 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'html_builder.dart';
 import 'model_viewer_plus.dart';
-import 'shim/dart_ui_web_fake.dart' if (dart.library.ui_web) 'dart:ui_web'
+import 'shim/dart_ui_web_fake.dart'
+    if (dart.library.ui_web) 'dart:ui_web'
     as ui_web;
 import 'shim/dart_web_fake.dart'
-    if (dart.library.js_interop) 'package:web/web.dart' as web;
+    if (dart.library.js_interop) 'package:web/web.dart'
+    as web;
 import 'shim/dart_web_fake.dart' if (dart.library.js_interop) 'dart:js_interop';
 
 class ModelViewerState extends State<ModelViewer> {
@@ -23,10 +25,11 @@ class ModelViewerState extends State<ModelViewer> {
 
   /// To generate the HTML code for using the model viewer.
   Future<void> generateModelViewerHtml() async {
-    final htmlTemplate = await rootBundle
-        .loadString('packages/model_viewer_plus/assets/template.html');
+    final String htmlTemplate = await rootBundle.loadString(
+      'packages/model_viewer_plus/assets/template.html',
+    );
 
-    final html = _buildHTML(htmlTemplate);
+    final String html = _buildHTML(htmlTemplate);
 
     ui_web.platformViewRegistry.registerViewFactory(
       'model-viewer-html-$_uniqueViewType',

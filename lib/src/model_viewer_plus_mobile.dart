@@ -1,7 +1,7 @@
-// ignore_for_file: depend_on_referenced_packages
 import 'dart:async';
 import 'dart:convert' show utf8;
-import 'dart:io' show File, HttpServer, HttpStatus, InternetAddress, Platform;
+import 'dart:io'
+    show File, HttpResponse, HttpServer, HttpStatus, InternetAddress, Platform;
 
 import 'package:android_intent_plus/android_intent.dart' as android_intent;
 import 'package:flutter/foundation.dart';
@@ -138,8 +138,9 @@ class ModelViewerState extends State<ModelViewer> {
     } else {
       params = const PlatformWebViewControllerCreationParams();
     }
-    final webViewController =
-        WebViewController.fromPlatformCreationParams(params);
+    final webViewController = WebViewController.fromPlatformCreationParams(
+      params,
+    );
     await webViewController.setBackgroundColor(Colors.transparent);
     await webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
     await webViewController.setNavigationDelegate(
@@ -176,8 +177,11 @@ class ModelViewerState extends State<ModelViewer> {
             // );
 
             final String fileURL;
-            if (['http', 'https', 'data']
-                .contains(Uri.parse(widget.src).scheme)) {
+            if ([
+              'http',
+              'https',
+              'data',
+            ].contains(Uri.parse(widget.src).scheme)) {
               fileURL = widget.src;
             } else {
               fileURL = p.joinAll([_proxyURL, 'model']);
@@ -191,10 +195,7 @@ class ModelViewerState extends State<ModelViewer> {
                 scheme: 'https',
                 host: 'arvr.google.com',
                 path: '/scene-viewer/1.0',
-                queryParameters: {
-                  'mode': 'ar_preferred',
-                  'file': fileURL,
-                },
+                queryParameters: {'mode': 'ar_preferred', 'file': fileURL},
               ).toString(),
               // package changed to com.google.android.googlequicksearchbox
               // to support the widest possible range of devices
@@ -215,9 +216,11 @@ class ModelViewerState extends State<ModelViewer> {
       ),
     );
     widget.javascriptChannels?.forEach((element) {
-      webViewController.addJavaScriptChannel(
-        element.name,
-        onMessageReceived: element.onMessageReceived,
+      unawaited(
+        webViewController.addJavaScriptChannel(
+          element.name,
+          onMessageReceived: element.onMessageReceived,
+        ),
       );
     });
 
@@ -231,21 +234,22 @@ class ModelViewerState extends State<ModelViewer> {
     _proxy = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
 
     setState(() {
-      final host = _proxy!.address.address;
-      final port = _proxy!.port;
+      final String host = _proxy!.address.address;
+      final int port = _proxy!.port;
       _proxyURL = 'http://$host:$port/';
     });
 
     _proxy!.listen((request) async {
-      final url = Uri.parse(widget.src);
-      final response = request.response;
+      final Uri url = Uri.parse(widget.src);
+      final HttpResponse response = request.response;
 
       switch (request.uri.path) {
         case '/':
         case '/index.html':
-          final htmlTemplate = await rootBundle
-              .loadString('packages/model_viewer_plus/assets/template.html');
-          final html = utf8.encode(_buildHTML(htmlTemplate));
+          final String htmlTemplate = await rootBundle.loadString(
+            'packages/model_viewer_plus/assets/template.html',
+          );
+          final Uint8List html = utf8.encode(_buildHTML(htmlTemplate));
           response
             ..statusCode = HttpStatus.ok
             ..headers.add('Content-Type', 'text/html;charset=UTF-8')
@@ -253,13 +257,15 @@ class ModelViewerState extends State<ModelViewer> {
             ..add(html);
           await response.close();
         case '/model-viewer.min.js':
-          final code = await _readAsset(
+          final Uint8List code = await _readAsset(
             'packages/model_viewer_plus/assets/model-viewer.min.js',
           );
           response
             ..statusCode = HttpStatus.ok
-            ..headers
-                .add('Content-Type', 'application/javascript;charset=UTF-8')
+            ..headers.add(
+              'Content-Type',
+              'application/javascript;charset=UTF-8',
+            )
             ..headers.add('Content-Length', code.lengthInBytes.toString())
             ..add(code);
           await response.close();
@@ -267,7 +273,7 @@ class ModelViewerState extends State<ModelViewer> {
           if (url.isAbsolute && !url.isScheme('file')) {
             await response.redirect(url);
           } else {
-            final data = await (url.isScheme('file')
+            final Uint8List data = await (url.isScheme('file')
                 ? _readFile(url.path)
                 : _readAsset(url.path));
             response
@@ -279,7 +285,9 @@ class ModelViewerState extends State<ModelViewer> {
             await response.close();
           }
         case '/favicon.ico':
-          final text = utf8.encode("Resource '${request.uri}' not found");
+          final Uint8List text = utf8.encode(
+            "Resource '${request.uri}' not found",
+          );
           response
             ..statusCode = HttpStatus.notFound
             ..headers.add('Content-Type', 'text/plain;charset=UTF-8')
@@ -292,8 +300,9 @@ class ModelViewerState extends State<ModelViewer> {
             await response.redirect(request.uri);
           } else if (request.uri.hasAbsolutePath) {
             // Some gltf models need other resources from the origin
-            final pathSegments = [...url.pathSegments]..removeLast();
-            final tryDestination = p.joinAll([
+            final List<String> pathSegments = [...url.pathSegments]
+              ..removeLast();
+            final String tryDestination = p.joinAll([
               url.origin,
               ...pathSegments,
               request.uri.path.replaceFirst('/', ''),
@@ -302,7 +311,9 @@ class ModelViewerState extends State<ModelViewer> {
             await response.redirect(Uri.parse(tryDestination));
           } else {
             debugPrint('404 with ${request.uri}');
-            final text = utf8.encode("Resource '${request.uri}' not found");
+            final Uint8List text = utf8.encode(
+              "Resource '${request.uri}' not found",
+            );
             response
               ..statusCode = HttpStatus.notFound
               ..headers.add('Content-Type', 'text/plain;charset=UTF-8')
@@ -316,7 +327,7 @@ class ModelViewerState extends State<ModelViewer> {
   }
 
   Future<Uint8List> _readAsset(final String key) async {
-    final data = await rootBundle.load(key);
+    final ByteData data = await rootBundle.load(key);
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
   }
 

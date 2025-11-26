@@ -127,8 +127,9 @@ abstract class HTMLBuilder {
     }
     // ar-modes
     if (arModes != null) {
-      modelViewerHtml
-          .write(' ar-modes="${htmlEscape.convert(arModes.join(' '))}"');
+      modelViewerHtml.write(
+        ' ar-modes="${htmlEscape.convert(arModes.join(' '))}"',
+      );
     }
     // ar-scale
     if (arScale != null) {
@@ -228,43 +229,51 @@ abstract class HTMLBuilder {
       if (interactionPromptThreshold < 0) {
         throw RangeError('interaction-prompt-threshold must be >= 0');
       }
-      modelViewerHtml
-          .write(' interaction-prompt-threshold="$interactionPromptThreshold"');
+      modelViewerHtml.write(
+        ' interaction-prompt-threshold="$interactionPromptThreshold"',
+      );
     }
     // camera-orbit
     if (cameraOrbit != null) {
-      modelViewerHtml
-          .write(' camera-orbit="${htmlEscape.convert(cameraOrbit)}"');
+      modelViewerHtml.write(
+        ' camera-orbit="${htmlEscape.convert(cameraOrbit)}"',
+      );
     }
     // camera-target
     if (cameraTarget != null) {
-      modelViewerHtml
-          .write(' camera-target="${htmlEscape.convert(cameraTarget)}"');
+      modelViewerHtml.write(
+        ' camera-target="${htmlEscape.convert(cameraTarget)}"',
+      );
     }
     // field-of-view
     if (fieldOfView != null) {
-      modelViewerHtml
-          .write(' field-of-view="${htmlEscape.convert(fieldOfView)}"');
+      modelViewerHtml.write(
+        ' field-of-view="${htmlEscape.convert(fieldOfView)}"',
+      );
     }
     // max-camera-orbit
     if (maxCameraOrbit != null) {
-      modelViewerHtml
-          .write(' max-camera-orbit="${htmlEscape.convert(maxCameraOrbit)}"');
+      modelViewerHtml.write(
+        ' max-camera-orbit="${htmlEscape.convert(maxCameraOrbit)}"',
+      );
     }
     // min-camera-orbit
     if (minCameraOrbit != null) {
-      modelViewerHtml
-          .write(' min-camera-orbit="${htmlEscape.convert(minCameraOrbit)}"');
+      modelViewerHtml.write(
+        ' min-camera-orbit="${htmlEscape.convert(minCameraOrbit)}"',
+      );
     }
     // max-field-of-view
     if (maxFieldOfView != null) {
-      modelViewerHtml
-          .write(' max-field-of-view="${htmlEscape.convert(maxFieldOfView)}"');
+      modelViewerHtml.write(
+        ' max-field-of-view="${htmlEscape.convert(maxFieldOfView)}"',
+      );
     }
     // min-field-of-view
     if (minFieldOfView != null) {
-      modelViewerHtml
-          .write(' min-field-of-view="${htmlEscape.convert(minFieldOfView)}"');
+      modelViewerHtml.write(
+        ' min-field-of-view="${htmlEscape.convert(minFieldOfView)}"',
+      );
     }
     // interpolation-decay
     if (interpolationDecay != null) {
@@ -277,8 +286,9 @@ abstract class HTMLBuilder {
     // Lighting & Env Attributes
     // skybox-image
     if (skyboxImage != null) {
-      modelViewerHtml
-          .write(' skybox-image="${htmlEscape.convert(skyboxImage)}"');
+      modelViewerHtml.write(
+        ' skybox-image="${htmlEscape.convert(skyboxImage)}"',
+      );
     }
     // environment-image
     if (environmentImage != null) {
@@ -311,16 +321,18 @@ abstract class HTMLBuilder {
     // Animation Attributes
     // animation-name
     if (animationName != null) {
-      modelViewerHtml
-          .write(' animation-name="${htmlEscape.convert(animationName)}"');
+      modelViewerHtml.write(
+        ' animation-name="${htmlEscape.convert(animationName)}"',
+      );
     }
     // animation-crossfade-duration
     if (animationCrossfadeDuration != null) {
       if (animationCrossfadeDuration < 0) {
         throw RangeError('shadow-softness must be any number >= 0');
       }
-      modelViewerHtml
-          .write(' animation-crossfade-duration="$animationCrossfadeDuration"');
+      modelViewerHtml.write(
+        ' animation-crossfade-duration="$animationCrossfadeDuration"',
+      );
     }
     // autoplay
     if (autoPlay ?? false) {
@@ -330,13 +342,15 @@ abstract class HTMLBuilder {
     // Scene Graph Attributes
     // variant-name
     if (variantName != null) {
-      modelViewerHtml
-          .write(' variant-name="${htmlEscape.convert(variantName)}"');
+      modelViewerHtml.write(
+        ' variant-name="${htmlEscape.convert(variantName)}"',
+      );
     }
     // orientation
     if (orientation != null) {
-      modelViewerHtml
-          .write(' orientation="${htmlEscape.convert(orientation)}"');
+      modelViewerHtml.write(
+        ' orientation="${htmlEscape.convert(orientation)}"',
+      );
     }
     // scale
     if (scale != null) {
@@ -348,7 +362,10 @@ abstract class HTMLBuilder {
       ..write(' style="')
       // CSS Styles
       ..write(
-        'background-color: rgba(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue}, ${backgroundColor.alpha}); ',
+        'background-color: rgba(${(backgroundColor.r * 255.0).round().clamp(0, 255)}, '
+        '${(backgroundColor.g * 255.0).round().clamp(0, 255)}, '
+        '${(backgroundColor.b * 255.0).round().clamp(0, 255)}, '
+        '${(backgroundColor.a * 255.0).round().clamp(0, 255)}); ',
       );
 
     // Annotations CSS
@@ -388,8 +405,10 @@ abstract class HTMLBuilder {
     if (debugLogging ?? false) {
       debugPrint('HTML generated for model_viewer_plus:');
     }
-    final html =
-        htmlTemplate.replaceFirst('<!-- body -->', modelViewerHtml.toString());
+    final String html = htmlTemplate.replaceFirst(
+      '<!-- body -->',
+      modelViewerHtml.toString(),
+    );
 
     if (debugLogging ?? false) {
       debugPrint(html);
