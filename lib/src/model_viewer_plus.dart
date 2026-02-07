@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'model_viewer_plus_stub.dart'
-    if (dart.library.io) 'model_viewer_plus_mobile.dart'
+    if (dart.library.io) 'model_viewer_plus_io.dart'
     if (dart.library.js_interop) 'model_viewer_plus_web.dart';
 
 enum Loading { auto, lazy, eager }
@@ -27,7 +27,7 @@ class JavascriptChannel {
   const JavascriptChannel(this.name, {required this.onMessageReceived});
 
   final String name;
-  final ValueChanged<JavaScriptMessage> onMessageReceived;
+  final ValueChanged<dynamic> onMessageReceived;
 }
 
 /// Flutter widget for rendering interactive 3D models.

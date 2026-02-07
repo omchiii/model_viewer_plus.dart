@@ -18,11 +18,14 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart'
 
 import 'html_builder.dart';
 import 'model_viewer_plus.dart';
+import 'model_viewer_plus_io.dart';
 
-class ModelViewerState extends State<ModelViewer> {
+class ModelViewerMobileState extends State<MobileModelViewer> {
   HttpServer? _proxy;
   WebViewController? _webViewController;
   late String _proxyURL;
+
+  ModelViewer get modelWidget => widget.widget;
 
   @override
   void initState() {
@@ -58,72 +61,72 @@ class ModelViewerState extends State<ModelViewer> {
 
   String _buildHTML(String htmlTemplate) {
     String src;
-    if (widget.src.startsWith('data:')) {
-      src = widget.src;
+    if (modelWidget.src.startsWith('data:')) {
+      src = modelWidget.src;
     } else {
       src = '/model';
     }
     return HTMLBuilder.build(
       htmlTemplate: htmlTemplate,
       src: src,
-      alt: widget.alt,
-      poster: widget.poster,
-      loading: widget.loading,
-      reveal: widget.reveal,
-      withCredentials: widget.withCredentials,
+      alt: modelWidget.alt,
+      poster: modelWidget.poster,
+      loading: modelWidget.loading,
+      reveal: modelWidget.reveal,
+      withCredentials: modelWidget.withCredentials,
       // AR Attributes
-      ar: widget.ar,
-      arModes: widget.arModes,
-      arScale: widget.arScale,
-      arPlacement: widget.arPlacement,
-      iosSrc: widget.iosSrc,
-      xrEnvironment: widget.xrEnvironment,
+      ar: modelWidget.ar,
+      arModes: modelWidget.arModes,
+      arScale: modelWidget.arScale,
+      arPlacement: modelWidget.arPlacement,
+      iosSrc: modelWidget.iosSrc,
+      xrEnvironment: modelWidget.xrEnvironment,
       // Cameras Attributes
-      cameraControls: widget.cameraControls,
-      disablePan: widget.disablePan,
-      disableTap: widget.disableTap,
-      touchAction: widget.touchAction,
-      disableZoom: widget.disableZoom,
-      orbitSensitivity: widget.orbitSensitivity,
-      autoRotate: widget.autoRotate,
-      autoRotateDelay: widget.autoRotateDelay,
-      rotationPerSecond: widget.rotationPerSecond,
-      interactionPrompt: widget.interactionPrompt,
-      interactionPromptStyle: widget.interactionPromptStyle,
-      interactionPromptThreshold: widget.interactionPromptThreshold,
-      cameraOrbit: widget.cameraOrbit,
-      cameraTarget: widget.cameraTarget,
-      fieldOfView: widget.fieldOfView,
-      maxCameraOrbit: widget.maxCameraOrbit,
-      minCameraOrbit: widget.minCameraOrbit,
-      maxFieldOfView: widget.maxFieldOfView,
-      minFieldOfView: widget.minFieldOfView,
-      interpolationDecay: widget.interpolationDecay,
+      cameraControls: modelWidget.cameraControls,
+      disablePan: modelWidget.disablePan,
+      disableTap: modelWidget.disableTap,
+      touchAction: modelWidget.touchAction,
+      disableZoom: modelWidget.disableZoom,
+      orbitSensitivity: modelWidget.orbitSensitivity,
+      autoRotate: modelWidget.autoRotate,
+      autoRotateDelay: modelWidget.autoRotateDelay,
+      rotationPerSecond: modelWidget.rotationPerSecond,
+      interactionPrompt: modelWidget.interactionPrompt,
+      interactionPromptStyle: modelWidget.interactionPromptStyle,
+      interactionPromptThreshold: modelWidget.interactionPromptThreshold,
+      cameraOrbit: modelWidget.cameraOrbit,
+      cameraTarget: modelWidget.cameraTarget,
+      fieldOfView: modelWidget.fieldOfView,
+      maxCameraOrbit: modelWidget.maxCameraOrbit,
+      minCameraOrbit: modelWidget.minCameraOrbit,
+      maxFieldOfView: modelWidget.maxFieldOfView,
+      minFieldOfView: modelWidget.minFieldOfView,
+      interpolationDecay: modelWidget.interpolationDecay,
       // Lighting & Env Attributes
-      skyboxImage: widget.skyboxImage,
-      environmentImage: widget.environmentImage,
-      exposure: widget.exposure,
-      shadowIntensity: widget.shadowIntensity,
-      shadowSoftness: widget.shadowSoftness,
+      skyboxImage: modelWidget.skyboxImage,
+      environmentImage: modelWidget.environmentImage,
+      exposure: modelWidget.exposure,
+      shadowIntensity: modelWidget.shadowIntensity,
+      shadowSoftness: modelWidget.shadowSoftness,
       // Animation Attributes
-      animationName: widget.animationName,
-      animationCrossfadeDuration: widget.animationCrossfadeDuration,
-      autoPlay: widget.autoPlay,
+      animationName: modelWidget.animationName,
+      animationCrossfadeDuration: modelWidget.animationCrossfadeDuration,
+      autoPlay: modelWidget.autoPlay,
       // Materials & Scene Attributes
-      variantName: widget.variantName,
-      orientation: widget.orientation,
-      scale: widget.scale,
+      variantName: modelWidget.variantName,
+      orientation: modelWidget.orientation,
+      scale: modelWidget.scale,
       // CSS Styles
-      backgroundColor: widget.backgroundColor,
+      backgroundColor: modelWidget.backgroundColor,
       // Annotations CSS
-      minHotspotOpacity: widget.minHotspotOpacity,
-      maxHotspotOpacity: widget.maxHotspotOpacity,
+      minHotspotOpacity: modelWidget.minHotspotOpacity,
+      maxHotspotOpacity: modelWidget.maxHotspotOpacity,
       // Others
-      innerModelViewerHtml: widget.innerModelViewerHtml,
-      relatedCss: widget.relatedCss,
-      relatedJs: widget.relatedJs,
-      id: widget.id,
-      debugLogging: widget.debugLogging,
+      innerModelViewerHtml: modelWidget.innerModelViewerHtml,
+      relatedCss: modelWidget.relatedCss,
+      relatedJs: modelWidget.relatedJs,
+      id: modelWidget.id,
+      debugLogging: modelWidget.debugLogging,
     );
   }
 
@@ -147,7 +150,7 @@ class ModelViewerState extends State<ModelViewer> {
       NavigationDelegate(
         onNavigationRequest: (request) async {
           debugPrint('ModelViewer wants to load: ${request.url}');
-          if (Platform.isIOS && request.url == widget.iosSrc) {
+          if (Platform.isIOS && request.url == modelWidget.iosSrc) {
             await launchUrl(
               Uri.parse(request.url.trimLeft()),
               mode: LaunchMode.inAppWebView,
@@ -181,8 +184,8 @@ class ModelViewerState extends State<ModelViewer> {
               'http',
               'https',
               'data',
-            ].contains(Uri.parse(widget.src).scheme)) {
-              fileURL = widget.src;
+            ].contains(Uri.parse(modelWidget.src).scheme)) {
+              fileURL = modelWidget.src;
             } else {
               fileURL = p.joinAll([_proxyURL, 'model']);
             }
@@ -215,7 +218,7 @@ class ModelViewerState extends State<ModelViewer> {
         },
       ),
     );
-    widget.javascriptChannels?.forEach((element) {
+    modelWidget.javascriptChannels?.forEach((element) {
       unawaited(
         webViewController.addJavaScriptChannel(
           element.name,
@@ -225,7 +228,7 @@ class ModelViewerState extends State<ModelViewer> {
     });
 
     debugPrint('ModelViewer initializing... <$_proxyURL>');
-    widget.onWebViewCreated?.call(webViewController);
+    modelWidget.onWebViewCreated?.call(webViewController);
     await webViewController.loadRequest(Uri.parse(_proxyURL));
     setState(() => _webViewController = webViewController);
   }
@@ -240,7 +243,7 @@ class ModelViewerState extends State<ModelViewer> {
     });
 
     _proxy!.listen((request) async {
-      final Uri url = Uri.parse(widget.src);
+      final Uri url = Uri.parse(modelWidget.src);
       final HttpResponse response = request.response;
 
       switch (request.uri.path) {

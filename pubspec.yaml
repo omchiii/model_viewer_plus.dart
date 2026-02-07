@@ -9,6 +9,7 @@ platforms:
   android:
   ios:
   web:
+  windows:
 environment:
   sdk: ^3.10.0
   flutter: '>=3.38.0'
@@ -23,6 +24,7 @@ dependencies:
   webview_flutter: ^4.11.0
   webview_flutter_android: ^4.4.0
   webview_flutter_wkwebview: ^3.19.0
+  flutter_inappwebview: ^6.1.5
 
 dev_dependencies:
   carapacik_lints: ^3.10.1
